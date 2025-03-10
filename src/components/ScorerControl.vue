@@ -5,22 +5,31 @@
         <div class="home col column justify-between">
           <div class="team col-auto">{{ state.teamName('home') }}</div>
           <div class="name col-auto">{{ state.name('home') }}</div>
-          <div
-            v-if="state.inner.team"
-            class="resources col-auto row justify-center"
-          >
-            <q-icon
-              v-for="n in state.inner.challengesRemaining[0]"
-              :key="n"
-              :name="mdiEye"
-              size="sm"
-            />
-            <q-icon
-              v-for="n in state.inner.timeoutsRemaining[0]"
-              :key="n"
-              :name="mdiClockOutline"
-              size="sm"
-            />
+          <div class="resources col-auto row justify-center">
+            <template v-if="state.inner.team">
+              <q-icon
+                v-for="n in state.inner.challengesRemaining[0]"
+                :key="n"
+                :name="mdiEye"
+                size="sm"
+              />
+              <q-icon
+                v-for="n in state.inner.timeoutsRemaining[0]"
+                :key="n"
+                :name="mdiClockOutline"
+                size="sm"
+              />
+            </template>
+            <template v-else>
+              <q-icon
+                v-for="n in state.inner.challengesRemaining[
+                  state.inner.currentBout
+                ][0]"
+                :key="n"
+                :name="mdiEye"
+                size="sm"
+              />
+            </template>
           </div>
           <div class="score col-auto">
             {{ state.score('home') }}
@@ -81,14 +90,12 @@
                   dense
                 />
                 <q-btn
-                  v-if="state.inner.team"
                   @click="addChallenge('home', -1)"
                   :icon="mdiEyeMinus"
                   size="lg"
                   dense
                 />
                 <q-btn
-                  v-if="state.inner.team"
                   @click="addChallenge('home', 1)"
                   :icon="mdiEyePlus"
                   size="lg"
@@ -115,22 +122,31 @@
         <div class="away col column justify-between">
           <div class="team col-auto">{{ state.teamName('away') }}</div>
           <div class="name col-auto">{{ state.name('away') }}</div>
-          <div
-            v-if="state.inner.team"
-            class="resources col-auto row justify-center"
-          >
-            <q-icon
-              v-for="n in state.inner.challengesRemaining[1]"
-              :key="n"
-              :name="mdiEye"
-              size="sm"
-            />
-            <q-icon
-              v-for="n in state.inner.timeoutsRemaining[1]"
-              :key="n"
-              :name="mdiClockOutline"
-              size="sm"
-            />
+          <div class="resources col-auto row justify-center">
+            <template v-if="state.inner.team">
+              <q-icon
+                v-for="n in state.inner.challengesRemaining[1]"
+                :key="n"
+                :name="mdiEye"
+                size="sm"
+              />
+              <q-icon
+                v-for="n in state.inner.timeoutsRemaining[1]"
+                :key="n"
+                :name="mdiClockOutline"
+                size="sm"
+              />
+            </template>
+            <template v-else>
+              <q-icon
+                v-for="n in state.inner.challengesRemaining[
+                  state.inner.currentBout
+                ][1]"
+                :key="n"
+                :name="mdiEye"
+                size="sm"
+              />
+            </template>
           </div>
           <div class="score col-auto">
             {{ state.score('away') }}
@@ -191,14 +207,12 @@
                   dense
                 />
                 <q-btn
-                  v-if="state.inner.team"
                   @click="addChallenge('away', -1)"
                   :icon="mdiEyeMinus"
                   size="lg"
                   dense
                 />
                 <q-btn
-                  v-if="state.inner.team"
                   @click="addChallenge('away', 1)"
                   :icon="mdiEyePlus"
                   size="lg"
@@ -308,16 +322,19 @@
             />
           </div>
         </q-card-section>
-        <q-card-section class="col bout-list">
+        <q-card-section class="col bout-list q-gutter-md">
           <div
             v-for="(b, i) in state.inner.bouts"
             :key="i"
             class="col row justify-start"
           >
             <div
-              class="col row"
+              class="col row items-center"
               :class="{ current: i === state.inner.currentBout }"
             >
+              <div class="col-shrink justify-center text-center">
+                {{ i + 1 }}:
+              </div>
               <div class="col text-right">
                 <q-icon
                   v-if="state.card('home', i, false)"
@@ -326,9 +343,7 @@
                   color="yellow"
                 />{{ state.name('home', i, false) }}
               </div>
-              <div class="col-1 justify-center text-center">
-                {{ i + 1 }}
-              </div>
+              <div class="col-shrink q-mx-sm">vs</div>
               <div class="col text-left">
                 {{ state.name('away', i, false)
                 }}<q-icon
@@ -337,6 +352,11 @@
                   class="rotate-90"
                   color="yellow"
                 />
+              </div>
+              <div class="col">
+                {{ state.score('home', i, false) ?? 0 }}:{{
+                  state.score('away', i, false) ?? 0
+                }}
               </div>
             </div>
           </div>

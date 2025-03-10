@@ -9,7 +9,7 @@
       <q-icon v-for="n in state.challenges" :key="n" :name="mdiEye" />
       <q-icon v-for="n in state.timeouts" :key="n" :name="mdiClock" />
     </div>
-    <div class="score col-auto">{{ state.points }}</div>
+    <div class="score col-shrink">{{ state.points }}</div>
     <div class="advantage col-auto" :class="{ invisible: !advantage }">
       <q-icon :name="mdiShieldStar" />
     </div>
@@ -92,13 +92,13 @@ defineProps<Props>();
       font-size: 5vh;
     }
     .name {
-      font-size: 7.5vh;
+      font-size: 6vh;
     }
     .resources {
       font-size: 5vh;
     }
     .score {
-      font-size: 20vh;
+      font-size: 19vh;
     }
     .advantage {
       font-size: 7.5vh;

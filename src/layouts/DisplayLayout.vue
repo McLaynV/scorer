@@ -278,6 +278,8 @@ onMounted(() => {
 
   .time {
     border-bottom: 1px solid black;
+    border: 1px solid violet;
+    z-index: 999;
 
     .overtime {
       text-transform: uppercase;
@@ -288,16 +290,16 @@ onMounted(() => {
 .display {
   .sides {
     .name {
-      font-size: 7.5vh;
+      font-size: 7vh;
     }
     .resources {
-      font-size: 5vh;
+      font-size: 4.5vh;
     }
     .score {
-      font-size: 20vh;
+      font-size: 19vh;
     }
     .advantage {
-      font-size: 7.5vh;
+      font-size: 7vh;
     }
     .cap-title {
       font-size: 3vh;
@@ -307,10 +309,10 @@ onMounted(() => {
     }
   }
   .time {
-    font-size: 15vh;
+    font-size: 13vh;
   }
   .next {
-    font-size: 5vh;
+    font-size: 4.5vh;
   }
 }
 

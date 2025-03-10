@@ -14,6 +14,8 @@ interface StatePool {
   currentBout: number;
   time: number;
   overtime: number;
+  challenges: number;
+  challengesRemaining: [number, number][];
   currentTime: number;
   cap: number | undefined;
 }
@@ -337,8 +339,11 @@ export const useStateStore = defineStore('state', {
       if (state.inner.empty) {
         return undefined;
       }
+      const s = ha2n(who);
       if (state.inner.team) {
-        return state.inner.challengesRemaining[ha2n(who)];
+        return state.inner.challengesRemaining[s];
+      } else if (state.inner.currentBout >= 0) {
+        return state.inner.challengesRemaining[state.inner.currentBout][s];
       } else {
         return undefined;
       }
@@ -355,6 +360,43 @@ export const useStateStore = defineStore('state', {
     },
   },
   actions: {
+    initList(options: {
+      pairs: [string, string][];
+      time: number;
+      overtime: number;
+      challenges: number;
+      cap: number | undefined;
+    }) {
+      const contestants = [
+        ...options.pairs.map((x) => x[0]),
+        ...options.pairs.map((x) => x[1]),
+      ];
+      const bouts: [number, number][] = options.pairs.map((_, i) => [
+        i,
+        options.pairs.length + i,
+      ]);
+      if (bouts === undefined) {
+        return;
+      }
+      this.inner = {
+        empty: false,
+        team: false,
+        contestants: contestants,
+        bouts: bouts,
+        currentBout: -1,
+        results: bouts.map(() => [0, 0]),
+        cards: bouts.map(() => [false, false]),
+        time: options.time,
+        overtime: options.overtime,
+        challenges: options.challenges,
+        challengesRemaining: bouts.map(() => [
+          options.challenges,
+          options.challenges,
+        ]),
+        currentTime: options.time,
+        cap: options.cap,
+      };
+    },
     initPool(options: {
       contestants: string[];
       time: number;
@@ -377,6 +419,8 @@ export const useStateStore = defineStore('state', {
         cards: bouts.map(() => [false, false]),
         time: options.time,
         overtime: options.overtime,
+        challenges: 0,
+        challengesRemaining: bouts.map(() => [0, 0]),
         currentTime: options.time,
         cap: options.cap,
       };
@@ -478,13 +522,21 @@ export const useStateStore = defineStore('state', {
         : [];
     },
     changeCurrentChallenges(who: HA, amount: number) {
-      if (this.inner.empty || !this.inner.team) {
+      if (this.inner.empty) {
         return;
       }
-      this.inner.challengesRemaining[ha2n(who)] = Math.max(
-        this.inner.challengesRemaining[ha2n(who)] + amount,
-        0
-      );
+      const s = ha2n(who);
+      if (this.inner.team) {
+        this.inner.challengesRemaining[s] = Math.max(
+          this.inner.challengesRemaining[s] + amount,
+          0
+        );
+      } else {
+        this.inner.challengesRemaining[this.inner.currentBout][s] = Math.max(
+          this.inner.challengesRemaining[this.inner.currentBout][s] + amount,
+          0
+        );
+      }
     },
     changeCurrentTimeouts(who: HA, amount: number) {
       if (this.inner.empty || !this.inner.team) {

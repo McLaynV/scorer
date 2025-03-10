@@ -4,10 +4,24 @@
 export default {
   scorerSetup: {
     title: 'Scorer setup',
-    teamToggleLabel: 'Team?',
     contestants: 'Contestants',
     bouts: 'Bouts',
+    list: {
+      label: 'List of bouts',
+      home: 'Contestant A',
+      away: 'Contestant B',
+      time: 'Bout time',
+      cap: 'Bout point cap',
+      capHint: 'If set, will show this point cap.',
+    },
+    pool: {
+      label: 'Pool',
+      time: 'Bout time',
+      cap: 'Bout point cap',
+      capHint: 'If set, will show this point cap.',
+    },
     team: {
+      label: 'Team bout',
       home: 'Team A',
       away: 'Team B',
       time: 'Leg time',
@@ -16,11 +30,6 @@ export default {
       cap: 'Leg point cap',
       capHint:
         'If set, will show the point cap of current leg in multiples of this number.',
-    },
-    pool: {
-      time: 'Bout time',
-      cap: 'Bout point cap',
-      capHint: 'If set, will show this point cap.',
     },
     overtime: 'Overtime',
     challenges: 'No. of challenges',

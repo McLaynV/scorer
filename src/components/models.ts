@@ -1,3 +1,9 @@
+export const ModeList = 'list';
+export const ModeGroup = 'group';
+export const ModeTeam = 'team';
+
+export type Mode = typeof ModeList | typeof ModeGroup | typeof ModeTeam;
+
 export type HA = 'home' | 'away';
 
 export type HAA = HA | 'all';
